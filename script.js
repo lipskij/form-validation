@@ -132,8 +132,25 @@ loginForm.addEventListener("submit", function (e) {
       password: loginPassword.value,
     }),
   })
-    .then((r) => r.text())
+    .then((response) => {
+      if (response.status === 401) {
+        hasError = true;
+      } else {
+        hasError = false;
+      }
+      return response.json();
+    })
+    .then(message => {
+      if (hasError === true) {
+        if (message.username) {
+          showError(loginUserName, message.username); // if status is 401
+        }
+        if (message.password) {
+          showError(loginPassword, message.password);
+        }
+      }
+    })
     .then(console.log);
 });
 
-//disable button if inputs are not valid and enable when valid
+//clear error message if input is empty or clear err msg after submit
