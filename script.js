@@ -103,16 +103,20 @@ form.addEventListener("submit", function (e) {
       password: password.value,
     }),
   })
-    .then((response) => { // when response 
+    .then((response) => {
+      // when response
       console.log(response.status);
-      if (response.status === 400) {// check if response status 400
+      if (response.status === 400) {
+        // check if response status 400
         hasError = true; //if 400 then it has err
       } else {
-        hasError = false; // if false then no err 
+        hasError = false; // if false then no err
       }
       return response.text(); // response message text
-    }).then(message => {
-      if (hasError === true) { // if status 400 
+    })
+    .then((message) => {
+      if (hasError === true) {
+        // if status 400
         showError(username, message); // when user name mach then show err message
       }
     })
@@ -135,12 +139,14 @@ loginForm.addEventListener("submit", function (e) {
     .then((response) => {
       if (response.status === 401) {
         hasError = true;
-      } else {
+      } else if (response.status === 200) { // clear err message
         hasError = false;
+        showSuccess(loginUserName);
+        showSuccess(loginPassword);
       }
       return response.json();
     })
-    .then(message => {
+    .then((message) => {
       if (hasError === true) {
         if (message.username) {
           showError(loginUserName, message.username); // if status is 401
@@ -148,9 +154,12 @@ loginForm.addEventListener("submit", function (e) {
         if (message.password) {
           showError(loginPassword, message.password);
         }
+      } else if (hasError === false) { // clear err message
+        showSuccess(loginUserName);
+        showSuccess(loginPassword);
       }
     })
     .then(console.log);
 });
 
-//clear error message if input is empty or clear err msg after submit
+//clear error message if input is correct 200
