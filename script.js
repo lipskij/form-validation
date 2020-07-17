@@ -137,29 +137,29 @@ loginForm.addEventListener("submit", function (e) {
     }),
   })
     .then((response) => {
-      if (response.status === 401) {
-        hasError = true;
-      } else if (response.status === 200) { // clear err message
+      if (response.status === 200) { // clear err message
         hasError = false;
-        showSuccess(loginUserName);
-        showSuccess(loginPassword);
+      } else if (response.status === 401) { 
+        hasError = true;
       }
       return response.json();
     })
     .then((message) => {
-      if (hasError === true) {
+      if (hasError === false) { // clear err message
+        showSuccess(loginUserName);
+        showSuccess(loginPassword);
+      } else if (hasError === true) { 
         if (message.username) {
           showError(loginUserName, message.username); // if status is 401
+        } else {
+          showSuccess(loginUserName);
         }
         if (message.password) {
           showError(loginPassword, message.password);
+        } else {
+          showSuccess(loginPassword);
         }
-      } else if (hasError === false) { // clear err message
-        showSuccess(loginUserName);
-        showSuccess(loginPassword);
       }
     })
     .then(console.log);
 });
-
-//clear error message if input is correct 200
