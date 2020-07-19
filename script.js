@@ -18,6 +18,14 @@ function showError(input, message) {
   const small = formControl.querySelector("small");
   small.innerText = message;
 }
+// clear input status
+function clearStatus(...inputs) {
+  inputs.forEach((input) => {
+    const formControl = input.parentElement;
+    formControl.classList.remove("success");
+    formControl.classList.remove("error");
+  });
+}
 
 // show success outline
 function showSuccess(input) {
@@ -125,6 +133,7 @@ form.addEventListener("submit", function (e) {
 
 loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
+  clearStatus(loginUserName, loginPassword);
 
   fetch("/login", {
     method: "POST",
@@ -137,27 +146,25 @@ loginForm.addEventListener("submit", function (e) {
     }),
   })
     .then((response) => {
-      if (response.status === 200) { // clear err message
+      if (response.status === 200) {
+        // clear err message
         hasError = false;
-      } else if (response.status === 401) { 
+      } else if (response.status === 401) {
         hasError = true;
       }
       return response.json();
     })
     .then((message) => {
-      if (hasError === false) { // clear err message
+      if (hasError === false) {
+        // clear err message
         showSuccess(loginUserName);
         showSuccess(loginPassword);
-      } else if (hasError === true) { 
+      } else if (hasError === true) {
         if (message.username) {
           showError(loginUserName, message.username); // if status is 401
-        } else {
-          showSuccess(loginUserName);
         }
         if (message.password) {
           showError(loginPassword, message.password);
-        } else {
-          showSuccess(loginPassword);
         }
       }
     })
