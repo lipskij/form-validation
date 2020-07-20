@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const User = require("./user");
+const { findAll } = require("./user");
 const salt = 10;
 const port = 3000;
 
@@ -34,18 +35,34 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const user = db.find((user) => user.username === req.body.username);
-  if (!user) {
-    res.status(401).json({ username: "User not found" });
-  } else {
-    bcrypt.compare(req.body.password, user.password, function (err, result) {
-      if (result === true) {
-        res.send(user);
-      } else {
-        res.status(401).json({ password: "Invalid password" });
-      }
-    });
-  }
+  User.findAll({
+    attributes: ["password"],
+    where: {
+      username: req.body.username,
+    },
+  }).then((users) => {
+    if (users.length === 0) {
+      res.status(401).json({ username: "User not found" });
+    } else {
+      bcrypt.compare(req.body.password, users[0].password, function (
+        err,
+        result
+      ) {
+        if (result === true) {
+          User.findAll({
+            attributes: ["id", "username"],
+            where: {
+              username: req.body.username,
+            },
+          }).then((users) => {
+            res.send(users[0]);
+          });
+        } else {
+          res.status(401).json({ password: "Invalid password" });
+        }
+      });
+    }
+  });
 });
 
 app.listen(port, () =>
