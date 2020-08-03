@@ -87,7 +87,6 @@ h2 {
 .form-control.access p {
   display: block;
   text-align: center;
-  visibility: visible;
   font-size: 18px;
 }
 
@@ -104,11 +103,25 @@ h2 {
   width: 100%;
 }
 
-.active {
-  position: relative;
-  visibility: visible;
-}
-
 .inactive {
   visibility: hidden;
+}
+
+.overlay-left.inactive {
+  transition: 0.6s all ease-in-out;
+  opacity: 0.1;
+}
+.overlay-right.inactive {
+  transition: 0.6s all ease-in-out;
+  opacity: 0.1;
+}
+.overlay-right {
+  transform: translateX(0);
+  transition: 0.6s all ease-in-out;
+  opacity: 1;
+}
+.overlay-left {
+  transform: translateX(0);
+  transition: 0.6s all ease-in-out;
+  opacity: 1;
 }
