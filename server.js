@@ -3,7 +3,6 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const User = require("./user");
-const { findAll } = require("./user");
 const salt = 10;
 const port = 3000;
 

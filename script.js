@@ -3,11 +3,25 @@ const username = document.getElementById("username");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 const password2 = document.getElementById("password2");
-const msg = document.getElementById("msg");
+const msg = document.querySelector(".msg");
 const btn = document.getElementsByTagName("button");
 const loginForm = document.getElementById("loginForm");
 const loginUserName = document.getElementById("login-username");
 const loginPassword = document.getElementById("login-password");
+
+const signUp = document.querySelector('.msg-register');
+const logIn = document.querySelector('.msg-login');
+const registerPannel = document.querySelector('.overlay-left');
+const loginPannel = document.querySelector('.overlay-right');
+
+signUp.addEventListener('click', () => {
+  registerPannel.classList.remove('inactive');
+  loginPannel.classList.add('inactive');
+})
+logIn.addEventListener('click', () => {
+  loginPannel.classList.remove('inactive');
+  registerPannel.classList.add('inactive');
+})
 
 let hasError = false;
 
@@ -33,12 +47,10 @@ function showSuccess(input) {
   formControl.className = "form-control success";
 }
 
-// show access message : make it visible only when all fields ar valid
-function successMessage() {
-  const formControl = msg.parentElement;
-  formControl.className = "form-control access";
-  msg.textContent = "Welcome!";
-}
+// cheange between signup and login
+// function changeForms() {
+  
+// }
 
 // check email is valid
 function checkEmail(input) {
